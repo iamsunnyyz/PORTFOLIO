@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 const IntroSection: React.FC = () => {
-  const words = ["Software Engineer", "Developer", "Coder", "Designer", "Youtuber", "Traveler"];
+  const words = useMemo(() => ["Software Engineer", "Developer", "Coder", "Designer", "Youtuber", "Traveler"], []);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [scrambledWord, setScrambledWord] = useState(words[0]);
   const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+[]{}|;:,./<>? ";
@@ -16,8 +16,7 @@ const IntroSection: React.FC = () => {
     }, totalDuration);
 
     return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [words.length]);
+  }, [words.length, totalDuration]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -46,7 +45,7 @@ const IntroSection: React.FC = () => {
     scramble();
 
     return () => clearInterval(intervalId);
-  }, [currentWordIndex, scrambleDuration]);
+  }, [currentWordIndex, scrambleDuration, words]);
 
   const getRandomCharacter = () => {
     const randomIndex = Math.floor(Math.random() * characters.length);
