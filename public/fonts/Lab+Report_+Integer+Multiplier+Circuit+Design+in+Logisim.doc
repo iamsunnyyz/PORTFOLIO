@@ -1,0 +1,606 @@
+Message-ID: <810654930.3.1729589784471@0367d6c7206e>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_2_609910695.1729589784470"
+
+------=_Part_2_609910695.1729589784470
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html xmlns:o=3D'urn:schemas-microsoft-com:office:office'
+      xmlns:w=3D'urn:schemas-microsoft-com:office:word'
+      xmlns:v=3D'urn:schemas-microsoft-com:vml'
+      xmlns=3D'urn:w3-org-ns:HTML'>
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8=
+">
+    <title>Lab Report: Integer Multiplier Circuit Design in Logisim</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:TargetScreenSize>1024x640</o:TargetScreenSize>
+            <o:PixelsPerInch>72</o:PixelsPerInch>
+            <o:AllowPNG/>
+        </o:OfficeDocumentSettings>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+                <!--
+        @page Section1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        table {
+            border: solid 1px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: solid 1px;
+            padding: 5px;
+        }
+
+        td {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-after: avoid;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        /* Confluence print stylesheet. Common to all themes for print medi=
+a */
+/* Full of !important until we improve batching for print CSS */
+
+@media print {
+    #main {
+        padding-bottom: 1em !important; /* The default padding of 6em is to=
+o much for printouts */
+    }
+
+    body {
+        font-family: Arial, Helvetica, FreeSans, sans-serif;
+        font-size: 10pt;
+        line-height: 1.2;
+    }
+
+    body, #full-height-container, #main, #page, #content, .has-personal-sid=
+ebar #content {
+        background: var(--ds-surface, #fff) !important;
+        color: var(--ds-text, #000) !important;
+        border: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    a, a:link, a:visited, a:focus, a:hover, a:active {
+        color: var(--ds-text, #000);
+    }
+
+    #content h1,
+    #content h2,
+    #content h3,
+    #content h4,
+    #content h5,
+    #content h6 {
+        font-family: Arial, Helvetica, FreeSans, sans-serif;
+        page-break-after: avoid;
+    }
+
+    pre {
+        font-family: Monaco, "Courier New", monospace;
+    }
+
+    #header,
+    .aui-header-inner,
+    #navigation,
+    #sidebar,
+    .sidebar,
+    #personal-info-sidebar,
+    .ia-fixed-sidebar,
+    .page-actions,
+    .navmenu,
+    .ajs-menu-bar,
+    .noprint,
+    .inline-control-link,
+    .inline-control-link a,
+    a.show-labels-editor,
+    .global-comment-actions,
+    .comment-actions,
+    .quick-comment-container,
+    #addcomment {
+        display: none !important;
+    }
+
+    /* CONF-28544 cannot print multiple pages in IE */
+    #splitter-content {
+        position: relative !important;
+    }
+
+    .comment .date::before {
+        content: none !important; /* remove middot for print view */
+    }
+
+    h1.pagetitle img {
+        height: auto;
+        width: auto;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #footer {
+        position: relative !important; /* CONF-17506 Place the footer at en=
+d of the content */
+        margin: 0;
+        padding: 0;
+        background: none;
+        clear: both;
+    }
+
+    #poweredby {
+        border-top: none;
+        background: none;
+    }
+
+    #poweredby li.print-only {
+        display: list-item;
+        font-style: italic;
+    }
+
+    #poweredby li.noprint {
+        display: none;
+    }
+
+    /* no width controls in print */
+    .wiki-content .table-wrap,
+    .wiki-content p,
+    .panel .codeContent,
+    .panel .codeContent pre,
+    .image-wrap {
+        overflow: visible !important;
+    }
+
+    /* TODO - should this work? */
+    #children-section,
+    #comments-section .comment,
+    #comments-section .comment .comment-body,
+    #comments-section .comment .comment-content,
+    #comments-section .comment p {
+        page-break-inside: avoid;
+    }
+
+    #page-children a {
+        text-decoration: none;
+    }
+
+    /**
+     hide twixies
+
+     the specificity here is a hack because print styles
+     are getting loaded before the base styles. */
+    #comments-section.pageSection .section-header,
+    #comments-section.pageSection .section-title,
+    #children-section.pageSection .section-header,
+    #children-section.pageSection .section-title,
+    .children-show-hide {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .children-show-hide.icon {
+        display: none;
+    }
+
+    /* personal sidebar */
+    .has-personal-sidebar #content {
+        margin-right: 0px;
+    }
+
+    .has-personal-sidebar #content .pageSection {
+        margin-right: 0px;
+    }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+-->
+    </style>
+</head>
+<body>
+    <h1>Lab Report: Integer Multiplier Circuit Design in Logisim</h1>
+    <div class=3D"Section1">
+        <p><strong>Course:</strong> CS201<br><strong>Lab Title:</strong> In=
+teger Multiplier Circuit<br><strong>Objective:</strong> To investigate the =
+implementation of integer multiplication using hardware components in Logis=
+im.</p>
+<hr>
+<h3 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-Introduction"><=
+strong>Introduction</strong></h3>
+<p>The goal of this lab is to build a 4-bit multiplier circuit using Logisi=
+m and simulate the hardware approach for multiplication. The design will us=
+e registers, adders, control logic, and a shift register to execute an inte=
+ger multiplication. We will explore how multiplication is implemented in ha=
+rdware, particularly focusing on a step-by-step execution of multiplication=
+ using binary arithmetic and registers.</p>
+<p>The multiplier circuit will demonstrate how machines can multiply number=
+s using control logic, adders, and registers. This circuit will be based on=
+ an algorithm that uses shifting and adding techniques to compute the produ=
+ct of two binary numbers.</p>
+<hr>
+<h3 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-AlgorithmofInte=
+gerMultiplication(HardwareApproach)"><strong>Algorithm of Integer Multiplic=
+ation (Hardware Approach)</strong></h3>
+<p>We are going to implement a binary multiplication using the following st=
+eps:</p>
+<ol start=3D"1">
+<li>
+<p><strong>Initialization:</strong></p>
+<ul>
+<li>
+<p>Set <code>A</code> (Accumulator) to 0.</p></li>
+<li>
+<p>Set <code>C</code> (Carry Bit) to 0.</p></li>
+<li>
+<p>Load the Multiplicand <code>M</code> into register <code>M</code>.</p></=
+li>
+<li>
+<p>Load the Multiplier <code>Q</code> into register <code>Q</code>.</p></li=
+>
+<li>
+<p>Initialize the Counter to <code>n</code>, where <code>n</code> is the bi=
+t size of the registers (4 bits for this lab).</p></li>
+</ul></li>
+<li>
+<p><strong>Repeat the following steps until Counter =3D 0:</strong></p>
+<ul>
+<li>
+<p><strong>Step 1:</strong> If the least significant bit (<code>Q0</code>) =
+of the Multiplier <code>Q</code> is 1:</p>
+<ul>
+<li>
+<p>Add the Multiplicand <code>M</code> to the Accumulator <code>A</code>.</=
+p></li>
+<li>
+<p>Shift the Carry <code>C</code>, Accumulator <code>A</code>, and Multipli=
+er <code>Q</code> to the right (C=E2=86=92A=E2=86=92Q).</p></li>
+</ul></li>
+<li>
+<p><strong>Step 2:</strong> If <code>Q0</code> is 0:</p>
+<ul>
+<li>
+<p>Shift the Carry <code>C</code>, Accumulator <code>A</code>, and Multipli=
+er <code>Q</code> to the right.</p></li>
+</ul></li>
+<li>
+<p><strong>Step 3:</strong> Decrease the Counter by 1.</p></li>
+</ul></li>
+<li>
+<p><strong>Stop the process when the Counter reaches 0.</strong><br>
+The product of the multiplication will be stored in the <code>A</code> and =
+<code>Q</code> registers combined, where <code>A</code> holds the higher bi=
+ts and <code>Q</code> holds the lower bits of the result.</p></li>
+</ol>
+<hr>
+<h3 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-CircuitComponen=
+ts"><strong>Circuit Components</strong></h3>
+<p>The circuit comprises the following essential components:</p>
+<ul>
+<li>
+<p><strong>M Register (4-bit):</strong> Holds the Multiplicand.</p></li>
+<li>
+<p><strong>Q Register (4-bit):</strong> Holds the Multiplier.</p></li>
+<li>
+<p><strong>A Register (4-bit):</strong> Initialized to 0 to store the parti=
+al products.</p></li>
+<li>
+<p><strong>C Register (1-bit):</strong> Stores the carry from the adder.</p=
+></li>
+<li>
+<p><strong>4-bit Adder:</strong> Adds the contents of the <code>A</code> an=
+d <code>M</code> registers when necessary.</p></li>
+<li>
+<p><strong>Shift Register:</strong> Simultaneously shifts the <code>C</code=
+>, <code>A</code>, and <code>Q</code> registers to the right after every st=
+ep.</p></li>
+<li>
+<p><strong>Control Logic:</strong> Manages the shifting, loading, and addin=
+g operations.</p></li>
+</ul>
+<hr>
+<h3 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-Step-by-StepImp=
+lementationinLogisim"><strong>Step-by-Step Implementation in Logisim</stron=
+g></h3>
+<h4 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-1.Buildthe4-bit=
+MultiplierCircuit:"><strong>1. Build the 4-bit Multiplier Circuit:</strong>=
+</h4>
+<ol start=3D"1">
+<li>
+<p><strong>Multiplicand (</strong><code>M</code><strong>):</strong></p>
+<ul>
+<li>
+<p>Use a 4-bit input device to load the multiplicand into the <code>M</code=
+> register.</p></li>
+</ul></li>
+<li>
+<p><strong>Multiplier (</strong><code>Q</code><strong>):</strong></p>
+<ul>
+<li>
+<p>Use another 4-bit input device to load the multiplier into the <code>Q</=
+code> register.</p></li>
+</ul></li>
+<li>
+<p><strong>C Register (Carry Bit):</strong></p>
+<ul>
+<li>
+<p>Implement a 1-bit <code>D flip-flop</code> to act as the carry register =
+<code>C</code>.</p></li>
+<li>
+<p>It will store the carry-out bit from the adder.</p></li>
+</ul></li>
+<li>
+<p><strong>A Register (Accumulator):</strong></p>
+<ul>
+<li>
+<p>Initialize the <code>A</code> register to zero at the start.</p></li>
+<li>
+<p>Use a 4-bit <code>D flip-flop</code> for storing the partial sums.</p></=
+li>
+</ul></li>
+<li>
+<p><strong>Adder:</strong></p>
+<ul>
+<li>
+<p>Build a 4-bit adder using Logisim's arithmetic components.</p></li>
+<li>
+<p>This will add the contents of <code>M</code> and <code>A</code> when <co=
+de>Q0 =3D 1</code>.</p></li>
+</ul></li>
+<li>
+<p><strong>Shift Registers:</strong></p>
+<ul>
+<li>
+<p>Implement shift registers for the <code>C</code>, <code>A</code>, and <c=
+ode>Q</code> registers.</p></li>
+<li>
+<p>After each iteration, shift the contents of <code>C</code>, <code>A</cod=
+e>, and <code>Q</code> to the right.</p></li>
+</ul></li>
+<li>
+<p><strong>Control Logic:</strong></p>
+<ul>
+<li>
+<p>Use control input devices (1-bit) to manage the loading, shifting, and a=
+dding of the registers.</p></li>
+<li>
+<p>A counter (4 iterations for 4-bit inputs) will keep track of the number =
+of shifts performed.</p></li>
+</ul></li>
+</ol>
+<hr>
+<h3 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-StepstoRuntheMu=
+ltiplication:"><strong>Steps to Run the Multiplication:</strong></h3>
+<ol start=3D"1">
+<li>
+<p><strong>Step 1: Set Initial Values</strong></p>
+<ul>
+<li>
+<p>Load <code>M =3D 1100</code> (multiplicand) into the <code>M</code> regi=
+ster.</p></li>
+<li>
+<p>Load <code>Q =3D 1110</code> (multiplier) into the <code>Q</code> regist=
+er.</p></li>
+<li>
+<p>Set <code>C =3D 0</code> (carry bit) and <code>A =3D 0000</code> (accumu=
+lator).</p></li>
+</ul></li>
+<li>
+<p><strong>Step 2: Perform Multiplication</strong></p>
+<ul>
+<li>
+<p>Follow the multiplication algorithm described above. For each step, chec=
+k the least significant bit (<code>Q0</code>).</p></li>
+<li>
+<p>If <code>Q0 =3D 1</code>, add the contents of <code>M</code> to <code>A<=
+/code>.</p></li>
+<li>
+<p>Shift the <code>C</code>, <code>A</code>, and <code>Q</code> registers t=
+o the right.</p></li>
+<li>
+<p>Repeat for 4 cycles.</p></li>
+</ul></li>
+</ol>
+<hr>
+<h3 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-Simulation:Mult=
+iplicationof1100=C3=971110"><strong>Simulation: Multiplication of 1100 =C3=
+=97 1110</strong></h3>
+<h4 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-InitialValues:"=
+><strong>Initial Values:</strong></h4>
+<ul>
+<li>
+<p><code>M =3D 1100</code> (Multiplicand)</p></li>
+<li>
+<p><code>Q =3D 1110</code> (Multiplier)</p></li>
+<li>
+<p><code>A =3D 0000</code> (Accumulator)</p></li>
+<li>
+<p><code>C =3D 0</code> (Carry bit)</p></li>
+</ul>
+<h4 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-Step-by-StepOpe=
+rations(SimulationTable):"><strong>Step-by-Step Operations (Simulation Tabl=
+e):</strong></h4>
+<div class=3D"table-wrap">
+<table data-table-width=3D"760" data-layout=3D"default" data-local-id=3D"dc=
+338304-41d6-40b1-9592-135dfe4a2858" class=3D"confluenceTable">
+<tbody>
+<tr>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>Iteration</p></th>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>C</p></th>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>A (Accumulator)</p></th>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>Q (Multiplier)</p></th>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>Operation</p></th>
+</tr>
+</tbody>
+</table>
+</div>
+<div class=3D"table-wrap">
+<table data-table-width=3D"760" data-layout=3D"default" data-local-id=3D"ff=
+92425d-6130-4b85-874a-dd7397b034de" class=3D"confluenceTable">
+<tbody>
+<tr>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>Iteration</p></th>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>C</p></th>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>A (Accumulator)</p></th>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>Q (Multiplier)</p></th>
+<th data-highlight-colour=3D"var(--ds-background-accent-gray-subtlest,var(-=
+-ds-background-accent-gray-subtlest,#f1f2f4))" class=3D"confluenceTh">
+<p>Operation</p></th>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p>1</p></td>
+<td class=3D"confluenceTd">
+<p>0</p></td>
+<td class=3D"confluenceTd">
+<p>1100</p></td>
+<td class=3D"confluenceTd">
+<p>1110</p></td>
+<td class=3D"confluenceTd">
+<p>Add M to A (Q0=3D1)</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p>&nbsp;</p></td>
+<td class=3D"confluenceTd">
+<p>0</p></td>
+<td class=3D"confluenceTd">
+<p>0110</p></td>
+<td class=3D"confluenceTd">
+<p>1111</p></td>
+<td class=3D"confluenceTd">
+<p>Shift right</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p>2</p></td>
+<td class=3D"confluenceTd">
+<p>0</p></td>
+<td class=3D"confluenceTd">
+<p>0110</p></td>
+<td class=3D"confluenceTd">
+<p>1111</p></td>
+<td class=3D"confluenceTd">
+<p>No add (Q0=3D0)</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p>&nbsp;</p></td>
+<td class=3D"confluenceTd">
+<p>0</p></td>
+<td class=3D"confluenceTd">
+<p>0011</p></td>
+<td class=3D"confluenceTd">
+<p>1111</p></td>
+<td class=3D"confluenceTd">
+<p>Shift right</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p>3</p></td>
+<td class=3D"confluenceTd">
+<p>0</p></td>
+<td class=3D"confluenceTd">
+<p>0011</p></td>
+<td class=3D"confluenceTd">
+<p>1111</p></td>
+<td class=3D"confluenceTd">
+<p>Add M to A (Q0=3D1)</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p>&nbsp;</p></td>
+<td class=3D"confluenceTd">
+<p>1</p></td>
+<td class=3D"confluenceTd">
+<p>0001</p></td>
+<td class=3D"confluenceTd">
+<p>1111</p></td>
+<td class=3D"confluenceTd">
+<p>Shift right</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p>4</p></td>
+<td class=3D"confluenceTd">
+<p>1</p></td>
+<td class=3D"confluenceTd">
+<p>1000</p></td>
+<td class=3D"confluenceTd">
+<p>1111</p></td>
+<td class=3D"confluenceTd">
+<p>Add M to A (Q0=3D1)</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p>&nbsp;</p></td>
+<td class=3D"confluenceTd">
+<p>1</p></td>
+<td class=3D"confluenceTd">
+<p>1000</p></td>
+<td class=3D"confluenceTd">
+<p>1111</p></td>
+<td class=3D"confluenceTd">
+<p>Final result</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id=3D"LabReport:IntegerMultiplierCircuitDesigninLogisim-FinalResult:"><=
+strong>Final Result:</strong></h4>
+<p>The final product is stored in both <code>A</code> and <code>Q</code>. T=
+he register <code>A</code> contains the higher 4 bits, and <code>Q</code> c=
+ontains the lower 4 bits of the result. The final product of 1100 =C3=97 11=
+10 is <code>11110000</code> in binary, equivalent to 240 in decimal.</p>
+    </div>
+</body>
+</html>
+------=_Part_2_609910695.1729589784470--

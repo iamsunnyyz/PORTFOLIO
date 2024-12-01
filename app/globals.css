@@ -2,22 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light mode (default) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0F172A;
+  --foreground: #38bdf8;
+  --text-color: #ffffff; /* Black text for light mode */
 }
 
+html.dark {
+  --background: #ffffff;
+  --foreground: #171717;
+  --text-color: #000000; /* White text for dark mode */
+}
+
+/* For system-level dark mode preference */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --text-color: #ffffff; /* White text for dark mode */
   }
 }
 
+
+@font-face {
+  font-family: 'Agustina Regular';
+  src: url('/fonts/agustina.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
 }
 
 @layer utilities {
@@ -25,3 +43,18 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px; /* Set width of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #a8a2a24d; /* Dark grey thumb for minimalistic look */
+  border-radius: 10px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #8a87873f; /* Transparent track */
+}
+
