@@ -11,6 +11,17 @@ interface WorkExperience {
 
 const experiences: WorkExperience[] = [
   {
+    companyName: 'Finfactor',
+    role: 'Software Developer',
+    period: 'Jan 2025 - Present',
+    responsibilities: [
+      'Created reusable React components',
+      'Enhanced website performance',
+      'Collaborated with design teams',
+    ],
+    logo: '/images/finfactor.jpeg',
+  },
+  {
     companyName: 'Freelencer',
     role: 'Self Employeed',
     period: 'Jan 2024 - Present',
@@ -24,24 +35,13 @@ const experiences: WorkExperience[] = [
   {
     companyName: 'Bluestock Fintech',
     role: 'SDE Intern',
-    period: 'June 2024 - Aug 2024',
+    period: 'Jun 2024 - Dec 2024',
     responsibilities: [
       'Developed new features for the core platform',
       'Led a team of 5 engineers',
       'Improved overall system performance by 15%',
     ],
     logo: '/images/bluestock.jpeg',
-  },
-  {
-    companyName: 'BNY Mellon',
-    role: 'Software Developer',
-    period: 'Feb 2022 - May 2024',
-    responsibilities: [
-      'Created reusable React components',
-      'Enhanced website performance',
-      'Collaborated with design teams',
-    ],
-    logo: '/images/bny.jpeg',
   },
   {
     companyName: 'Advertyzement',
@@ -54,7 +54,6 @@ const experiences: WorkExperience[] = [
     ],
     logo: '/images/advertyzement.jpeg',
   },
-  // Add more experiences here
 ];
 
 const WhereIveWorked: React.FC = () => {
