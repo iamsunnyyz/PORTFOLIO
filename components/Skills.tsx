@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import Lottie from 'lottie-react'; // Corrected import
 import frontend from '../animation/frontend.json';
