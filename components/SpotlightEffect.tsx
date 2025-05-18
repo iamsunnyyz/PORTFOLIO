@@ -5,6 +5,8 @@ const SpotlightEffect: React.FC = () => {
   const spotlightRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleMouseMove = (e: MouseEvent) => {
       if (spotlightRef.current) {
         spotlightRef.current.style.left = `${e.clientX}px`;

@@ -12,18 +12,22 @@ const Navbar: React.FC = () => {
   // Toggle dark/light theme
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
-    if (isDarkMode) {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
+    if (typeof window !== 'undefined') {
+      if (isDarkMode) {
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+      }
     }
   };
 
   // Set the theme on component mount based on system preference
   useEffect(() => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      setIsDarkMode(true);
-      document.documentElement.classList.add("dark");
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setIsDarkMode(true);
+        document.documentElement.classList.add("dark");
+      }
     }
   }, []);
 
@@ -63,7 +67,7 @@ const Navbar: React.FC = () => {
         } md:flex`}
       >
         <ul className="flex flex-col items-center md:flex-row md:space-x-6 p-4 md:p-0">
-          {["about", "skills", "experience", "projects", "contact"].map(
+          {["About", "Skills", "Experience", "Projects", "Contact"].map(
             (section) => (
               <li key={section}>
                 <Link

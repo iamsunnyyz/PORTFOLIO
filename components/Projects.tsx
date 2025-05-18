@@ -26,6 +26,8 @@ const Projects: React.FC = () => {
 
   // Auto-scroll effect for frontend (left-to-right)
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const frontendCarousel = frontendCarouselRef.current;
     if (!frontendCarousel) return;
 
@@ -49,6 +51,8 @@ const Projects: React.FC = () => {
 
   // Auto-scroll effect for backend (right-to-left)
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const backendCarousel = backendCarouselRef.current;
     if (!backendCarousel) return;
 

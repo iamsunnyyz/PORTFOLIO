@@ -24,15 +24,6 @@ html.dark {
   }
 }
 
-
-@font-face {
-  font-family: 'Agustina Regular';
-  src: url('/fonts/agustina.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-
 body {
   color: var(--foreground);
   background-color: var(--background);
