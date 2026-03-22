@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
         
         </ul>
 
-        <p className="font-roboto-mono text-[12px] text-gray-600">
+        <p className="font-mono text-[12px] text-gray-600">
           <a
             href="https://github.com/iamsunnyyz"
             className="hover:text-[#38BDF8]"

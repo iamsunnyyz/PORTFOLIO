@@ -11,7 +11,7 @@ const Projects: React.FC = () => {
   const projectsData = {
     frontend: [
       { title: "Veterinary", description: "A brief overview of frontend project 1.", techStack: ["HTML", "CSS", "JavaScript", "ReactJS"], link: "https://github.com/iamsunnyyz", image: "/images/frontend/veterinary.png" },
-      { title: "Yoga Class", description: "A brief overview of frontend project 2.", techStack: ["Bootstrap", "Javascript", "HTML"], link: "https://github.com/iamsunnyyz", image: "/images/frontend/yogaclass.png" },
+      { title: "Yoga Class", description: "A brief overview of frontend project 2.", techStack: ["Bootstrap", "JavaScript", "HTML"], link: "https://github.com/iamsunnyyz", image: "/images/frontend/yogaclass.png" },
       { title: "Nice Meal", description: "A brief overview of frontend project 3.", techStack: ["Vue", "NextJS", "Bootstrap"], link: "https://github.com/iamsunnyyz", image: "/images/frontend/nicemeal.png" },
       { title: "Eat Sushi", description: "A brief overview of frontend project 4.", techStack: ["NextJS", "Tailwind CSS"], link: "https://github.com/iamsunnyyz", image: "/images/frontend/sushi.png" },
       { title: "Dental care", description: "A brief overview of frontend project 5.", techStack: ["NextJS", "Tailwind CSS"], link: "https://github.com/iamsunnyyz", image: "/images/frontend/dentalcare.png" },

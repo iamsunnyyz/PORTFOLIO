@@ -1,47 +1,50 @@
 'use client';
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
+
+const sections = [
+  { id: "about", label: "About" },
+  { id: "skills", label: "Skills" },
+  { id: "experience", label: "Experience" },
+  { id: "projects", label: "Projects" },
+  { id: "contact", label: "Contact" },
+];
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLightTheme, setIsLightTheme] = useState(false);
 
-  // Toggle Menu for mobile view
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
-  // Toggle dark/light theme
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    if (typeof window !== 'undefined') {
-      if (isDarkMode) {
-        document.documentElement.classList.remove("dark");
-      } else {
-        document.documentElement.classList.add("dark");
-      }
-    }
+    const nextIsLightTheme = !isLightTheme;
+    setIsLightTheme(nextIsLightTheme);
+    document.documentElement.classList.toggle("light", nextIsLightTheme);
+    window.localStorage.setItem("theme", nextIsLightTheme ? "light" : "dark");
   };
 
-  // Set the theme on component mount based on system preference
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        setIsDarkMode(true);
-        document.documentElement.classList.add("dark");
-      }
-    }
+    const savedTheme = window.localStorage.getItem("theme");
+    const shouldUseLightTheme = savedTheme === "light";
+    setIsLightTheme(shouldUseLightTheme);
+    document.documentElement.classList.toggle("light", shouldUseLightTheme);
   }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-lg">
-      {/* Brand Logo */}
       <h1 className="text-2xl font-agustina text-accent">
-        <Link href="/#hero">SunnyChauhan</Link>
+        <a href="/#hero" className="group inline-block">
+          <span className="relative w-fit">
+            SunnyChauhan
+            <span className="absolute -bottom-0.5 left-0 h-[1px] w-0 bg-accent duration-300 group-hover:w-full"></span>
+          </span>
+        </a>
       </h1>
 
-      {/* Hamburger Menu for Mobile View */}
       <button
         onClick={toggleMenu}
         className="md:hidden flex flex-col space-y-1 focus:outline-none"
+        aria-expanded={isMenuOpen}
+        aria-label="Toggle navigation menu"
       >
         <span
           className={`block w-6 h-0.5 bg-accent transform transition ${
@@ -60,29 +63,38 @@ const Navbar: React.FC = () => {
         ></span>
       </button>
 
-      {/* Navbar Links */}
       <nav
         className={`absolute top-full left-0 w-full bg-bg-secondary md:static md:w-auto md:bg-transparent ${
           isMenuOpen ? "block" : "hidden"
         } md:flex`}
       >
         <ul className="flex flex-col items-center md:flex-row md:space-x-6 p-4 md:p-0">
-          {["About", "Skills", "Experience", "Projects", "Contact"].map(
-            (section) => (
-              <li key={section}>
-                <Link
-  href={`/#${section}`}
-  className="group block p-2 duration-500 text-1xl text-[#94A3B8] hover:text-[#38bdf8]"
->
-  <span className="relative w-fit">{section}
-    <span className="absolute -bottom-0.5 left-0 h-[1px] w-0 group-hover:w-full bg-accent duration-300 ease-in-scroll"></span>
-  </span>
-</Link>
-
-              </li>
-            )
-          )}
-          {/* Resume Button */}
+          {sections.map((section) => (
+            <li key={section.id}>
+              <a
+                href={`/#${section.id}`}
+                onClick={() => setIsMenuOpen(false)}
+                className="group block p-2 duration-500 text-1xl text-[#94A3B8] hover:text-[#38bdf8]"
+              >
+                <span className="relative w-fit">
+                  {section.label}
+                  <span className="absolute -bottom-0.5 left-0 h-[1px] w-0 group-hover:w-full bg-accent duration-300 ease-in-scroll"></span>
+                </span>
+              </a>
+            </li>
+          ))}
+          <li>
+            <a
+              href="/tools"
+              onClick={() => setIsMenuOpen(false)}
+              className="group block p-2 duration-500 text-1xl text-[#94A3B8] hover:text-[#38bdf8]"
+            >
+              <span className="relative w-fit">
+                Tools
+                <span className="absolute -bottom-0.5 left-0 h-[1px] w-0 group-hover:w-full bg-accent duration-300 ease-in-scroll"></span>
+              </span>
+            </a>
+          </li>
           <li>
             <a
               className="block px-4 py-2 text-sm text-accent border border-accent rounded hover:bg-accent-light duration-200"
@@ -94,13 +106,13 @@ const Navbar: React.FC = () => {
               Resume
             </a>
           </li>
-          {/* Theme Toggle Button */}
           <li>
             <button
               onClick={toggleTheme}
               className="block px-4 py-2 text-accent focus:outline-none"
+              aria-label={isLightTheme ? "Switch to dark theme" : "Switch to light theme"}
             >
-              {isDarkMode ? (
+              {isLightTheme ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-6 h-6"

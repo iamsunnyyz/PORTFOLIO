@@ -11,9 +11,14 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        accent: "#38bdf8",
+        "accent-light": "rgba(56, 189, 248, 0.12)",
+        "bg-secondary": "rgba(15, 23, 42, 0.92)",
+        "dark-800": "#0f172a",
+        "dark-600": "#334155",
       },
       fontFamily: {
-        agustina: ['var(--font-agustina)'],
+        agustina: ["var(--font-agustina)"],
       },
     },
   },

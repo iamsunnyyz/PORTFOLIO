@@ -2,30 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Light mode (default) */
 :root {
-  --background: #0F172A;
+  --background: #0f172a;
   --foreground: #38bdf8;
-  --text-color: #ffffff; /* Black text for light mode */
+  --text-color: #ffffff;
 }
 
-html.dark {
+html.light {
   --background: #ffffff;
   --foreground: #171717;
-  --text-color: #000000; /* White text for dark mode */
+  --text-color: #0f172a;
 }
 
-/* For system-level dark mode preference */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --text-color: #ffffff; /* White text for dark mode */
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  color: var(--foreground);
+  color: var(--text-color);
   background-color: var(--background);
 }
 
@@ -37,15 +31,14 @@ body {
 
 /* Custom Scrollbar Styles */
 ::-webkit-scrollbar {
-  width: 8px; /* Set width of the scrollbar */
+  width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #a8a2a24d; /* Dark grey thumb for minimalistic look */
-  border-radius: 10px; /* Rounded corners */
+  background-color: #a8a2a24d;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #8a87873f; /* Transparent track */
+  background-color: #8a87873f;
 }
-

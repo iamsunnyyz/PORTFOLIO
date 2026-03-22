@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 const agustina = localFont({
-  src: '../public/fonts/Agustina.woff',
+  src: './fonts/Agustina.woff',
   variable: '--font-agustina',
 });
 

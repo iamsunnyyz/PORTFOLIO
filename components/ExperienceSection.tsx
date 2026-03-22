@@ -23,8 +23,8 @@ const experiences: WorkExperience[] = [
     logo: '/images/finfactor.jpeg',
   },
   {
-    companyName: 'Freelencer',
-    role: 'Self Employeed',
+    companyName: 'Freelancer',
+    role: 'Self-Employed',
     period: 'Jan 2024 - Present',
     responsibilities: [
       'Developed new features for the core platform',
