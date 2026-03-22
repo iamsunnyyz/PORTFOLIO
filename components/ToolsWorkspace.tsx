@@ -407,7 +407,7 @@ export default function ToolsWorkspace() {
   const [aesPassphrase, setAesPassphrase] = useState('');
   const [aesSalt, setAesSalt] = useState('');
   const [aesIv, setAesIv] = useState('');
-  const [aesIterations, setAesIterations] = useState('250000');
+  const [aesIterations, setAesIterations] = useState('2000');
   const [aesOutput, setAesOutput] = useState('');
   const [aesError, setAesError] = useState('');
 

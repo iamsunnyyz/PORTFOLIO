@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 const sections = [
   { id: "about", label: "About" },
@@ -32,12 +33,12 @@ const Navbar: React.FC = () => {
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-lg">
       <h1 className="text-2xl font-agustina text-accent">
-        <a href="/#hero" className="group inline-block">
+        <Link href="/" className="group inline-block">
           <span className="relative w-fit">
             SunnyChauhan
             <span className="absolute -bottom-0.5 left-0 h-[1px] w-0 bg-accent duration-300 group-hover:w-full"></span>
           </span>
-        </a>
+        </Link>
       </h1>
 
       <button
@@ -84,7 +85,7 @@ const Navbar: React.FC = () => {
             </li>
           ))}
           <li>
-            <a
+            <Link
               href="/tools"
               onClick={() => setIsMenuOpen(false)}
               className="group block p-2 duration-500 text-1xl text-[#94A3B8] hover:text-[#38bdf8]"
@@ -93,7 +94,7 @@ const Navbar: React.FC = () => {
                 Tools
                 <span className="absolute -bottom-0.5 left-0 h-[1px] w-0 group-hover:w-full bg-accent duration-300 ease-in-scroll"></span>
               </span>
-            </a>
+            </Link>
           </li>
           <li>
             <a
