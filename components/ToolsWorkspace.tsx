@@ -7,7 +7,7 @@ type FormatterMode = 'json' | 'sql' | 'xml';
 
 const toolTabs: Array<{ key: ToolKey; title: string; description: string }> = [
   { key: 'base64', title: 'Base64 Encode / Decode', description: 'Convert plain text to Base64 and decode it back.' },
-  { key: 'aes', title: 'AES Encrypt / Decrypt', description: 'Encrypt and decrypt text with a passphrase using AES-GCM.' },
+  { key: 'aes', title: 'AES Encrypt / Decrypt', description: 'Encrypt and decrypt text with passphrase, plain salt, IV, and iterations.' },
   { key: 'formatter', title: 'Formatter', description: 'Format JSON, SQL, and XML snippets quickly.' },
   { key: 'password', title: 'Random Password Generator', description: 'Generate strong passwords with full character controls.' },
   { key: 'cron', title: 'Cron Expression Tool', description: 'Validate a cron expression and preview its next occurrences.' },
@@ -68,6 +68,11 @@ function base64ToBytes(value: string) {
   return Uint8Array.from(atob(value), (char) => char.charCodeAt(0));
 }
 
+function createRandomPlainString(length: number) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+}
+
 function formatXml(value: string) {
   const normalized = value.replace(/>\s*</g, '><').replace(/</g, '\n<').trim();
   const lines = normalized.split('\n').filter(Boolean);
@@ -80,9 +85,7 @@ function formatXml(value: string) {
       }
 
       const formattedLine = `${'  '.repeat(indentLevel)}${line}`;
-      const isOpeningTag =
-        /^<[^!?/][^>]*[^/]?>$/.test(line) &&
-        !line.includes('</');
+      const isOpeningTag = /^<[^!?/][^>]*[^/]?>$/.test(line) && !line.includes('</');
 
       if (isOpeningTag) {
         indentLevel += 1;
@@ -140,9 +143,7 @@ function createPassword(options: {
   };
 
   const chosenSets = Object.entries(options)
-    .filter(([key, enabled]) =>
-      ['uppercase', 'lowercase', 'digits', 'symbols'].includes(key) && enabled
-    )
+    .filter(([key, enabled]) => ['uppercase', 'lowercase', 'digits', 'symbols'].includes(key) && enabled)
     .map(([key]) => sets[key as keyof typeof sets]);
 
   if (!chosenSets.length) {
@@ -398,6 +399,7 @@ function fieldClassName() {
 
 export default function ToolsWorkspace() {
   const [activeTool, setActiveTool] = useState<ToolKey>('base64');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [base64Input, setBase64Input] = useState('');
   const [base64Output, setBase64Output] = useState('');
@@ -442,6 +444,8 @@ export default function ToolsWorkspace() {
     }
   }, [cronInput]);
 
+  const activeToolMeta = toolTabs.find((tool) => tool.key === activeTool)!;
+
   const handleBase64Encode = () => {
     try {
       setBase64Error('');
@@ -472,25 +476,20 @@ export default function ToolsWorkspace() {
       }
 
       const encoder = new TextEncoder();
-      const salt = aesSalt.trim() ? base64ToBytes(aesSalt.trim()) : crypto.getRandomValues(new Uint8Array(16));
-      const iv = aesIv.trim() ? base64ToBytes(aesIv.trim()) : crypto.getRandomValues(new Uint8Array(12));
+      const saltText = aesSalt.trim() || createRandomPlainString(16);
+      const ivText = aesIv.trim() || createRandomPlainString(16);
+      const salt = encoder.encode(saltText);
+      const iv = encoder.encode(ivText);
 
       if (salt.length < 8) {
-        throw new Error('Salt must be at least 8 bytes when provided.');
+        throw new Error('Salt must be at least 8 characters long.');
       }
 
       if (iv.length < 12) {
-        throw new Error('IV must be at least 12 bytes when provided.');
+        throw new Error('IV must be at least 12 characters long.');
       }
 
-      const baseKey = await crypto.subtle.importKey(
-        'raw',
-        encoder.encode(aesPassphrase),
-        'PBKDF2',
-        false,
-        ['deriveKey']
-      );
-
+      const baseKey = await crypto.subtle.importKey('raw', encoder.encode(aesPassphrase), 'PBKDF2', false, ['deriveKey']);
       const key = await crypto.subtle.deriveKey(
         { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
         baseKey,
@@ -499,22 +498,22 @@ export default function ToolsWorkspace() {
         ['encrypt']
       );
 
-      const cipherBuffer = await crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv },
-        key,
-        encoder.encode(aesInput)
+      const cipherBuffer = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoder.encode(aesInput));
+
+      const payload = JSON.stringify(
+        {
+          salt: saltText,
+          iv: ivText,
+          iterations,
+          ciphertext: bytesToBase64(new Uint8Array(cipherBuffer)),
+        },
+        null,
+        2
       );
 
-      const payload = JSON.stringify({
-        salt: bytesToBase64(salt),
-        iv: bytesToBase64(iv),
-        iterations,
-        ciphertext: bytesToBase64(new Uint8Array(cipherBuffer)),
-      }, null, 2);
-
       setAesError('');
-      setAesSalt(bytesToBase64(salt));
-      setAesIv(bytesToBase64(iv));
+      setAesSalt(saltText);
+      setAesIv(ivText);
       setAesOutput(payload);
     } catch (error) {
       setAesError(error instanceof Error ? error.message : 'Encryption failed.');
@@ -528,28 +527,30 @@ export default function ToolsWorkspace() {
       }
 
       const payload = JSON.parse(aesInput) as {
-        salt: string;
-        iv: string;
+        salt?: string;
+        iv?: string;
         iterations?: number;
         ciphertext: string;
       };
+
+      const saltText = payload.salt ?? aesSalt.trim();
+      const ivText = payload.iv ?? aesIv.trim();
       const iterations = Number(payload.iterations ?? aesIterations);
+
+      if (!saltText || !ivText) {
+        throw new Error('Salt and IV are required to decrypt.');
+      }
+
       if (!Number.isInteger(iterations) || iterations < 1000) {
         throw new Error('Iterations must be an integer greater than or equal to 1000.');
       }
 
-      const salt = base64ToBytes(payload.salt ?? aesSalt.trim());
-      const iv = base64ToBytes(payload.iv ?? aesIv.trim());
-      const ciphertext = base64ToBytes(payload.ciphertext);
       const encoder = new TextEncoder();
-      const baseKey = await crypto.subtle.importKey(
-        'raw',
-        encoder.encode(aesPassphrase),
-        'PBKDF2',
-        false,
-        ['deriveKey']
-      );
+      const salt = encoder.encode(saltText);
+      const iv = encoder.encode(ivText);
+      const ciphertext = base64ToBytes(payload.ciphertext);
 
+      const baseKey = await crypto.subtle.importKey('raw', encoder.encode(aesPassphrase), 'PBKDF2', false, ['deriveKey']);
       const key = await crypto.subtle.deriveKey(
         { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
         baseKey,
@@ -558,15 +559,11 @@ export default function ToolsWorkspace() {
         ['decrypt']
       );
 
-      const plainBuffer = await crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv },
-        key,
-        ciphertext
-      );
+      const plainBuffer = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
 
       setAesError('');
-      setAesSalt(bytesToBase64(salt));
-      setAesIv(bytesToBase64(iv));
+      setAesSalt(saltText);
+      setAesIv(ivText);
       setAesIterations(String(iterations));
       setAesOutput(new TextDecoder().decode(plainBuffer));
     } catch (error) {
@@ -613,24 +610,52 @@ export default function ToolsWorkspace() {
 
   return (
     <section className="relative z-10 mx-auto max-w-7xl px-4 pb-20 pt-28 sm:px-8 lg:px-12">
-      <div className="mb-10 rounded-[32px] border border-white/10 bg-slate-950/70 p-8 shadow-[0_30px_80px_rgba(2,12,27,0.55)] backdrop-blur-xl">
-        <p className="font-mono text-sm text-accent">Utility Workspace</p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl" style={{ color: 'var(--text-color)' }}>
-          Quick tools on a dedicated page.
-        </h1>
-        <p className="mt-4 max-w-3xl text-base text-slate-400">
-          This page keeps the main portfolio clean while giving you fast access to practical developer tools for
-          encoding, encryption, formatting, password generation, and cron inspection.
-        </p>
+      <div className="mb-10 rounded-[32px] border border-white/10 bg-slate-950/75 p-8 shadow-[0_30px_80px_rgba(2,12,27,0.55)] backdrop-blur-xl">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="font-mono text-sm text-accent">Utility Workspace</p>
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl" style={{ color: 'var(--text-color)' }}>
+              Quick tools on a dedicated page.
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-400">
+              This page keeps the main portfolio clean while giving you fast access to practical developer tools for
+              encoding, encryption, formatting, password generation, and cron inspection.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSidebarOpen((current) => !current)}
+            className="rounded-full border border-white/15 px-5 py-2.5 text-sm text-slate-200 transition hover:border-accent/60 hover:bg-white/5"
+          >
+            {sidebarOpen ? 'Close Tools' : 'Open Tools'}
+          </button>
+        </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-        <aside className="rounded-[28px] border border-white/10 bg-slate-950/70 p-4 backdrop-blur-xl">
-          <div className="space-y-3">
+      {sidebarOpen && (
+        <div className="mb-6 rounded-[28px] border border-white/10 bg-slate-950/85 p-4 shadow-[0_30px_80px_rgba(2,12,27,0.45)] backdrop-blur-xl">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <p className="font-mono text-sm text-accent">Tools</p>
+              <h2 className="mt-2 text-xl font-semibold text-white">Choose a workspace</h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(false)}
+              className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 transition hover:border-accent/60 hover:bg-white/5"
+            >
+              Hide
+            </button>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {toolTabs.map((tool) => (
               <button
                 key={tool.key}
-                onClick={() => setActiveTool(tool.key)}
+                type="button"
+                onClick={() => {
+                  setActiveTool(tool.key);
+                  setSidebarOpen(false);
+                }}
                 className={`w-full rounded-2xl border px-4 py-4 text-left transition ${
                   activeTool === tool.key
                     ? 'border-accent bg-accent-light text-white'
@@ -638,13 +663,19 @@ export default function ToolsWorkspace() {
                 }`}
               >
                 <div className="text-sm font-semibold">{tool.title}</div>
-                <div className="mt-1 text-xs text-slate-400">{tool.description}</div>
+                <div className="mt-2 text-xs leading-5 text-slate-400">{tool.description}</div>
               </button>
             ))}
           </div>
-        </aside>
+        </div>
+      )}
 
-        <div className="rounded-[28px] border border-white/10 bg-slate-950/70 p-6 shadow-[0_30px_80px_rgba(2,12,27,0.45)] backdrop-blur-xl">
+      <div className="rounded-[28px] border border-white/10 bg-slate-950/75 p-6 shadow-[0_30px_80px_rgba(2,12,27,0.45)] backdrop-blur-xl md:p-8">
+          <div className="mb-8">
+            <p className="font-mono text-sm text-accent">{activeToolMeta.title}</p>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400">{activeToolMeta.description}</p>
+          </div>
+
           {activeTool === 'base64' && (
             <div className="space-y-5">
               <div>
@@ -665,36 +696,36 @@ export default function ToolsWorkspace() {
             <div className="space-y-5">
               <div>
                 <h2 className="text-2xl font-semibold" style={{ color: 'var(--text-color)' }}>AES Encrypt / Decrypt</h2>
-                <p className="mt-2 text-sm text-slate-400">Encrypt or decrypt with explicit passphrase, salt, IV, and iteration settings. Leave salt and IV empty to auto-generate them.</p>
+                <p className="mt-2 text-sm text-slate-400">Encrypt or decrypt with explicit passphrase, salt, IV, and iteration settings. Salt and IV are plain strings now.</p>
               </div>
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 <input
                   type="password"
                   value={aesPassphrase}
                   onChange={(event) => setAesPassphrase(event.target.value)}
-                  placeholder="Enter passphrase"
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-accent"
+                  placeholder="Passphrase"
+                  className={inputClassName()}
                 />
                 <input
                   type="text"
                   value={aesIterations}
                   onChange={(event) => setAesIterations(event.target.value)}
                   placeholder="PBKDF2 iterations"
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-accent"
+                  className={inputClassName()}
                 />
                 <input
                   type="text"
                   value={aesSalt}
                   onChange={(event) => setAesSalt(event.target.value)}
-                  placeholder="Salt in Base64 (optional)"
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-accent"
+                  placeholder="Salt as plain string"
+                  className={inputClassName()}
                 />
                 <input
                   type="text"
                   value={aesIv}
                   onChange={(event) => setAesIv(event.target.value)}
-                  placeholder="IV in Base64 (optional)"
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-accent"
+                  placeholder="IV as plain string"
+                  className={inputClassName()}
                 />
               </div>
               <textarea className={fieldClassName()} value={aesInput} onChange={(event) => setAesInput(event.target.value)} placeholder="Enter plain text to encrypt or an AES payload JSON to decrypt..." />
@@ -703,8 +734,8 @@ export default function ToolsWorkspace() {
                 <button onClick={handleAesDecrypt} className="rounded-full border border-white/15 px-5 py-2 text-sm text-slate-200 hover:border-accent/60 hover:bg-white/5">Decrypt</button>
                 <button
                   onClick={() => {
-                    setAesSalt(bytesToBase64(crypto.getRandomValues(new Uint8Array(16))));
-                    setAesIv(bytesToBase64(crypto.getRandomValues(new Uint8Array(12))));
+                    setAesSalt(createRandomPlainString(16));
+                    setAesIv(createRandomPlainString(16));
                   }}
                   className="rounded-full border border-white/15 px-5 py-2 text-sm text-slate-200 hover:border-accent/60 hover:bg-white/5"
                 >
@@ -753,7 +784,7 @@ export default function ToolsWorkspace() {
                   type="text"
                   value={passwordSeedWord}
                   onChange={(event) => setPasswordSeedWord(event.target.value)}
-                  placeholder="Optional word to include, for example: devil"
+                  placeholder="Optional seed word, for example: devil"
                   className="mb-5 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-accent"
                 />
                 <label className="mb-3 block text-sm text-slate-300">
@@ -802,7 +833,7 @@ export default function ToolsWorkspace() {
                 type="text"
                 value={cronInput}
                 onChange={(event) => setCronInput(event.target.value)}
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-accent"
+                className={inputClassName()}
                 placeholder="*/15 * * * *"
               />
               <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
@@ -829,8 +860,11 @@ export default function ToolsWorkspace() {
               </div>
             </div>
           )}
-        </div>
       </div>
     </section>
   );
+}
+
+function inputClassName() {
+  return 'w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-accent';
 }
